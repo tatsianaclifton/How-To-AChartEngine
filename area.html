@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+	<head>
+	    <title>Home Page</title>
+	    <!-- Latest compiled and minified CSS -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	    <!-- Optional theme -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	     <!-- Font awesome -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	    <link rel='stylesheet' href='style.css'/>
+	</head>
+
+    <body>
+    <!--Navigation-->
+	    <nav class="navbar navbar-default navbar-fixed-top">
+	        <div class="container">
+	          
+	          <div class="navbar-header">
+		          <a class="navbar-brand" href="index.html">How-To AChartEngine</a>
+	          </div>
+	          
+	           <div id="myNavbar" class="navbar-collapse collapse">
+	              <ul class="nav navbar-nav navbar-right">
+	              <li><a class="page-scroll" href="index.html">Getting Started</a></li>
+	              <li><a class="page-scroll" href="line.html">Line Chart</a></li>
+	              <li><a class="page-scroll" href="area.html">Area Chart</a></li>
+	              <li><a class="page-scroll" href="scatter.html">Scatter Chart</a></li>
+	              <li><a class="page-scroll" href="bar.html">Bar Chart</a></li>
+	              <li><a class="page-scroll" href="pie.html">Pie Chart</a></li>
+	              <li><a class="page-scroll" href="bubble.html">Bubble Chart</a></li>
+	              <li><a class="page-scroll" href="combined.html">Combined Chart</a></li>
+	              </ul>
+	          </div>
+	          
+	        </div>
+	    </nav>
+	  <div class="container-fluid">
+
+	  <div class="jumbotron">
+	  <h2>Area Chart</h2>
+	  <h3>Basic Area Chart</h3>
+	  <p>First, we need to create a new activity that will display the area chart. For that, create two new files: activity_area.xml and AreaActivity.java. Include the new activity into the AndroidManifest.xml file:</p>
+      <pre><code>&ltactivity android:name=".AreaActivity" /&gt</code></pre>
+
+      <p>The activity_area.xml is the same as for the line chart.</p>
+
+      <p>The area chart is similar to the line chart. It is required to use the method public void addFillOutsideLine(XYSeriesRenderer.FillOutsideLine fill). We create a fill and set its color. Next, we call the method to add this fill. Use the Type.BOUNDS_ALL for the fill so it does not go beyond the X axis: </p>
+<pre><code>XYSeriesRenderer.FillOutsideLine fill = new XYSeriesRenderer.FillOutsideLine(XYSeriesRenderer.FillOutsideLine.Type.BOUNDS_ALL);
+fill.setColor(Color.MAGENTA);
+renderer.addFillOutsideLine(fill);</code></pre>
+
+	<p>Besides that, the code of AreaActivity.java is the same as it was for a basic line chart. We receive the following area chart: <img class="emulator" src="10.png" alt="new module"></p>
+
+    <h3>Customized Area Chart</h3>
+	<p>We can customize the area chart in the same way as the line chart. Additionally, we can add the values to the lines using this code: </p>
+<pre><code>renderer.setDisplayChartValues(true);</code></pre> 
+
+    <p>All code for creating the customized area chart will be the following:</p>
+<pre><code>//define arrays with data
+int month[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+int carSale[] = {10, 20, 18, 40, 21, 35, 9, 11, 15, 5, 20, 21};
+
+//create XY series using defined data
+XYSeries series = new XYSeries("Car Sale 2015");
+for (int i = 0; i < month.length; i++) {
+    series.add(month[i], carSale[i]);
+}
+
+//create data set and add series to it
+XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+dataset.addSeries(series);
+
+//create renderers
+XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+XYSeriesRenderer renderer = new XYSeriesRenderer();
+
+//fill the area below the chart
+XYSeriesRenderer.FillOutsideLine fillM = new XYSeriesRenderer.FillOutsideLine(XYSeriesRenderer.FillOutsideLine.Type.BOUNDS_ALL);
+fillM.setColor(Color.MAGENTA);
+renderer.addFillOutsideLine(fillM);
+
+//set color of the chart
+renderer.setColor(Color.BLACK);
+//set line width
+renderer.setLineWidth((float)4.0);
+//set the style for chart's points
+renderer.setPointStyle(PointStyle.DIAMOND);
+//set if the values on the chart are displayed
+renderer.setDisplayChartValues(true);
+//give the title for the chart
+mRenderer.setChartTitle("Sales of the cars, 2015");
+//set the size of the chart title
+mRenderer.setChartTitleTextSize((float) 24.0);
+//set margins and define their color as transparent
+int[] margins = {30, 60, 50, 30};
+mRenderer.setMargins(margins);
+mRenderer.setMarginsColor(Color.argb(0x01, 0x01, 0x01, 0x01));
+//set titles for axes, their size and color
+mRenderer.setXTitle("Month");
+mRenderer.setYTitle("Cars Sold");
+mRenderer.setAxisTitleTextSize((float) 24.0);
+//set the size and the color of labels
+mRenderer.setLabelsColor(Color.BLACK);
+mRenderer.setLabelsTextSize((float)24.0);
+//set the background color of the chart
+mRenderer.setApplyBackgroundColor(true);
+mRenderer.setBackgroundColor(Color.TRANSPARENT);
+//set if the grid will be shown
+mRenderer.setShowGrid(true);
+//create the array of strings for the X axis labels
+String[] m = new String[] {
+        "Jan", "Feb" , "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug" , "Sep", "Oct", "Nov", "Dec"
+};
+//add text of labels to the X axis
+for(int i=0; i< month.length;i++){
+    mRenderer.addXTextLabel(i, m[i]);
+}
+//hide the labels that only their text will be shown
+mRenderer.setXLabels(0);
+//set color of labels and axes
+mRenderer.setXLabelsColor(Color.BLACK);
+mRenderer.setYLabelsColor(0, Color.BLACK);
+mRenderer.setXAxisColor(Color.BLACK);
+mRenderer.setYAxisColor(Color.BLACK);
+//set the text size of the legend
+mRenderer.setLegendTextSize((float)26.0);
+//add XY renderer to multiple renderer
+mRenderer.addSeriesRenderer(renderer);
+//get the area where the chart will be displayed
+LinearLayout chartContainer = (LinearLayout) findViewById(R.id.area_chart_container);
+//clean this area
+chartContainer.removeAllViews();
+//create the area chart
+GraphicalView chart = ChartFactory.getLineChartView(AreaActivity.this, dataset, mRenderer);
+//display it
+chartContainer.addView(chart);</code></pre>
+
+    <p>The customized area chart: <img class="emulator" src="11.png" alt="new module"></p>
+
+    <h3>Adding Lines</h3>
+	<p>Let's see how we can add one more series to the same chart. We will add one more area that will indicate car sales for 2014. We need to add the following code to the AreaActivity.java:</p>
+<pre><code>int carSale2014[] = {8, 25, 8, 44, 11, 25, 9, 18, 7, 10, 21, 21};
+XYSeries series2014 = new XYSeries("Car Sales 2014");
+for (int i = 0; i < month.length; i++) {
+    series2014.add(month[i], carSale2014[i]);
+}
+dataset.addSeries(series2014);
+XYSeriesRenderer renderer2014 = new XYSeriesRenderer();
+renderer2014.setColor(Color.BLUE);
+renderer2014.setLineWidth((float)4.0);
+XYSeriesRenderer.FillOutsideLine fillY = new XYSeriesRenderer.FillOutsideLine(XYSeriesRenderer.FillOutsideLine.Type.BOUNDS_ALL);
+fillY.setColor(Color.BLUE);
+renderer2014.addFillOutsideLine(fillY);
+mRenderer.addSeriesRenderer(renderer2014);</code></pre> 
+
+    <p>We create the array of integers that holds the car sales during 2014. Then, we create series that are named "Car Sales 2014" and add it to the dataset we have created:</p>
+<pre><code>XYSeries series2014 = new XYSeries("Car Sales 2014");
+for (int i = 0; i < month.length; i++) {
+    series2014.add(month[i], carSale2014[i]);
+}
+dataset.addSeries(series2014);</code></pre>
+
+    <p>We create renderer for this series and set its color and the line width. Also, since we are creating an area chart, we define the fill for this series. Finally, we add the XY renderer to the multiseries renderer:</p>
+<pre><code>mRenderer.addSeriesRenderer(renderer2014);</code></pre>
+
+    <p>We receive: <img class="emulator" src="12.png" alt="new module"></p>
+
+    <p>However, we can notice that one area is hidden behind another. It happens because we set the color of the fills. We need to eliminate <code>fillM.setColor(Color.MAGENTA);</code> and <code>fillY.setColor(Color.BLUE);</code>. The new area chart is: <img class="emulator" src="13.png" alt="new module"></p>
+    
+    <p>In the next section, we will create a scatter chart.</p>
+	 
+     <div class="button-group">
+		 <a type="button" class="btn btn-info" href="line.html">Prev</a>
+		 <a type="button" class="btn btn-info" href="scatter.html">Next</a>
+	 </div>
+	  </div>
+
+      </div>
+      <!--Footer-->
+	  <hr>
+	  <div id="footer" class="footer">
+	  	<div class="container">
+	  		<div class="row">
+		        <div class="col-lg-12 text-center">
+		          <p class="small"><i class="fa fa-copyright"></i>2016 Written by Tatsiana Clifton</p>
+		        </div>
+		      </div>
+		    </div>
+		</div>
+      <script src='//code.jquery.com/jquery-1.11.0.min.js'></script>
+      <script src='/script.js'></script>
+    </body>
+
+</html>

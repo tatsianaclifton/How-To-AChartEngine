@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+	<head>
+	    <title>Home Page</title>
+	    <!-- Latest compiled and minified CSS -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	    <!-- Optional theme -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	     <!-- Font awesome -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	    <link rel='stylesheet' href='style.css'/>
+	</head>
+
+    <body>
+    <!--Navigation-->
+	    <nav class="navbar navbar-default navbar-fixed-top">
+	        <div class="container">
+	          
+	          <div class="navbar-header">
+		          <a class="navbar-brand" href="index.html">How-To AChartEngine</a>
+	          </div>
+	          
+	           <div id="myNavbar" class="navbar-collapse collapse">
+	              <ul class="nav navbar-nav navbar-right">
+	              <li><a class="page-scroll" href="index.html">Getting Started</a></li>
+	              <li><a class="page-scroll" href="line.html">Line Chart</a></li>
+	              <li><a class="page-scroll" href="area.html">Area Chart</a></li>
+	              <li><a class="page-scroll" href="scatter.html">Scatter Chart</a></li>
+	              <li><a class="page-scroll" href="bar.html">Bar Chart</a></li>
+	              <li><a class="page-scroll" href="pie.html">Pie Chart</a></li>
+	              <li><a class="page-scroll" href="bubble.html">Bubble Chart</a></li>
+                  <li><a class="page-scroll" href="combined.html">Combined Chart</a></li>
+	              </ul>
+	          </div>
+	          
+	        </div>
+	    </nav>
+	  <div class="container-fluid">
+
+	  <div class="jumbotron">
+	  <h2>Line Chart</h2>
+	  <h3>Basic Line Chart</h3>
+	  <p>We need to create a new activity that will display the line chart. For that, create two new files: activity_line.xml and LineActivity.java. Include the new activity into the AndroidManifest.xml file:</p>
+      <pre><code>&ltactivity android:name=".LineActivity" /&gt</code></pre>
+
+	  <p>In the file activity_line.xml, we need to define the area where the chart will be displayed. We will create a text view with the title and the linear layout where the chart will be displayed: </p>
+
+	  <pre><code>&ltTextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Line Chart"
+        android:id="@+id/title"
+        android:gravity="center_horizontal"/&gt
+
+&ltLinearLayout
+        android:id="@+id/line_chart_container"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"&gt
+    &lt/LinearLayout&gt</code></pre>
+
+    <p>In LineActivity.java, we include the code that draws a simple line chart for car sales during 12 months: </p>
+    <pre><code>public class LineActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_line);
+
+        int month[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+        int carSale[] = {10, 20, 18, 40, 21, 35, 9, 11, 15, 5, 20, 21};
+
+        XYSeries series = new XYSeries("Car Sales");
+        for (int i = 0; i < month.length; i++) {
+            series.add(month[i], carSale[i]);
+        }
+
+        XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+        dataset.addSeries(series);
+
+        XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+        XYSeriesRenderer renderer = new XYSeriesRenderer();
+        mRenderer.addSeriesRenderer(renderer);
+
+        LinearLayout chartContainer = (LinearLayout) findViewById(R.id.line_chart_container);
+        chartContainer.removeAllViews();
+
+        GraphicalView chart = ChartFactory.getLineChartView(LineActivity.this, dataset, mRenderer);
+        chartContainer.addView(chart);
+
+    }
+}</code></pre>
+    <p>We create two arrays of integers. The array <code>int month[]</code> indicates 12 months. The array <code>int carSale[]</code> includes the number of sold cars for every month accordingly. Both arrays must have the same number of elements. Otherwise, the app will crash. Next, we create XYSeries that encapsulates values for X and Y for a line chart:</p>
+<pre><code>XYSeries series = new XYSeries("Car Sales");
+for (int i = 0; i < month.length; i++) {
+    series.add(month[i], carSale[i]);
+}</code></pre>
+    <p>We create series XYMultipleSeriesDataset that includes 0 to many XYSeries:</p>
+<pre><code>XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+dataset.addSeries(series);</code></pre>
+
+    <p>We create two renderers: one for the XY type series, one for multiple XY series and add a simple renderer to the multiple renderer:</p>
+<pre><code>XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+XYSeriesRenderer renderer = new XYSeriesRenderer();
+mRenderer.addSeriesRenderer(renderer);</code></pre>
+    
+    <p>Next, we find by id the linear layout we have created as a container for a chart. We create the GraphicalView chart that encapsulates the graphical chart and add it to the linear layout: <p>
+<pre><code>LinearLayout chartContainer = (LinearLayout) findViewById(R.id.line_chart_container);
+chartContainer.removeAllViews();
+
+GraphicalView chart = ChartFactory.getLineChartView(LineActivity.this, dataset, mRenderer);
+chartContainer.addView(chart);</code></pre>
+
+    <p>If we run the app using an emulator, we will see the following graph: <img class="emulator" src="8.png" alt="new module"></p>
+    <p>This chart looks very simple. We will see how it is possible to customize the chart to make it more appealing. </p>
+
+    <h3>Customize Line Chart</h3>
+    <p>Set the color of the line: </p>
+<pre><code>chart.setBackgroundColor(Color.CYAN);</code></pre>
+
+	<p>Set the width of the line: </p>
+<pre><code>renderer.setLineWidth((float)4.0);</code></pre>
+
+	<p>Set the point style: </p>
+<pre><code>renderer.setPointStyle(PointStyle.DIAMOND);</code></pre>
+
+	<p>Set the title for the chart and change its size:</p>
+<pre><code>mRenderer.setChartTitle("Sales of the cars, 2015");
+mRenderer.setChartTitleTextSize((float) 24.0);</code></pre>
+
+    <p>We can customize the margins of the chart.
+    We can do this with the function <code>setMargins(int[] margins)</code> where margins are set in order: top, left, bottom, right: </p>
+<pre><code>int[] margins = {30, 60, 30, 30};
+mRenderer.setMargins(margins);</code></pre>
+
+     <p>Change the black color for margins: </p>
+<pre><code>mRenderer.setMarginsColor(Color.argb(0x00, 0x01, 0x01, 0x01));</code></pre>
+
+    <p>Add titles for the Y and X axes:</p>
+<pre><code>mRenderer.setXTitle("Cars Sold");  //set the name of X axis
+mRenderer.setYTitle("Month");   //set the name of Y axis
+</code></pre>
+    
+    <p>Change the size of axes title:</p>
+<pre><code>mRenderer.setAxisTitleTextSize((float) 24.0);</code></pre>
+
+    <p>Set the color of labels:</p>
+<pre><code>mRenderer.setLabelsColor(Color.BLACK);</pre></code>
+ 
+ 	<p>Set the size of labels of X and Y axes: </p>
+<pre><code>mRenderer.setLabelsTextSize((float)24.0);</code></pre>
+
+    <p>Add names to the months instead of having numbers:</p>
+<pre><code>//create the array of strings with months' names
+String[] m = new String[] {"Jan", "Feb" , "Mar", "Apr", "May", "Jun","Jul", "Aug" , "Sep", "Oct", "Nov", "Dec"};
+
+//add text label for every value on the X axis
+for(int i=0; i< month.length;i++){
+    mRenderer.addXTextLabel(i, m[i]);
+}</code></pre>
+
+	<p>Set the number of X axis label to zero to avoid displaying names of the months and numbers at the same time: </p>
+<pre><code>mRenderer.setXLabels(0);</code></pre>
+
+	<p>Set the color of values on X and Y axes to black. Also, change the color of the axes to black: </p>
+<pre><code>mRenderer.setXLabelsColor(Color.BLACK);
+mRenderer.setYLabelsColor(0, Color.BLACK);
+mRenderer.setXAxisColor(Color.BLACK);
+mRenderer.setYAxisColor(Color.BLACK);</code></pre>
+
+    <p>In order to set the background color of the grid, two steps are required. First, set if the background color should be applied to true. Then, set the color:</p>
+<pre><code>mRenderer.setApplyBackgroundColor(true);
+mRenderer.setBackgroundColor(Color.YELLOW);</code></pre>
+
+	<p>Set the text size of the legend: </p>
+<pre><code>mRenderer.setLegendTextSize((float)26.0);</code></pre>
+
+    <p>We also can display the grid using the following code:</p>
+<pre><code>mRenderer.setShowGrid(true);</code></pre>
+
+     <p>As a result, the customized line chart should display similar results to the below image: <img class="emulator" src="9.png" alt="new module"></p>
+     <div class="button-group">
+		 <a type="button" class="btn btn-info" href="index.html">Prev</a>
+		 <a type="button" class="btn btn-info" href="area.html">Next</a>
+	 </div>
+	  </div>
+
+      </div>
+      <!--Footer-->
+	  <hr>
+	  <div id="footer" class="footer">
+	  	<div class="container">
+	  		<div class="row">
+		        <div class="col-lg-12 text-center">
+		          <p class="small"><i class="fa fa-copyright"></i>2016 Written by Tatsiana Clifton</p>
+		        </div>
+		      </div>
+		    </div>
+		</div>
+      <script src='//code.jquery.com/jquery-1.11.0.min.js'></script>
+      <script src='/script.js'></script>
+    </body>
+
+</html>

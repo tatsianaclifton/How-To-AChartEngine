@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+	<head>
+	    <title>Home Page</title>
+	    <!-- Latest compiled and minified CSS -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	    <!-- Optional theme -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	     <!-- Font awesome -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	    <link rel='stylesheet' href='style.css'/>
+	</head>
+
+    <body>
+    <!--Navigation-->
+	    <nav class="navbar navbar-default navbar-fixed-top">
+	        <div class="container">
+	          
+	          <div class="navbar-header">
+		          <a class="navbar-brand" href="index.html">How-To AChartEngine</a>
+	          </div>
+	          
+	           <div id="myNavbar" class="navbar-collapse collapse">
+	              <ul class="nav navbar-nav navbar-right">
+	              <li><a class="page-scroll" href="index.html">Getting Started</a></li>
+	              <li><a class="page-scroll" href="line.html">Line Chart</a></li>
+	              <li><a class="page-scroll" href="area.html">Area Chart</a></li>
+	              <li><a class="page-scroll" href="scatter.html">Scatter Chart</a></li>
+	              <li><a class="page-scroll" href="bar.html">Bar Chart</a></li>
+	              <li><a class="page-scroll" href="pie.html">Pie Chart</a></li>
+	              <li><a class="page-scroll" href="bubble.html">Bubble Chart</a></li>
+	              <li><a class="page-scroll" href="combined.html">Combined Chart</a></li>
+	              </ul>
+	          </div>
+	          
+	        </div>
+	    </nav>
+	  <div class="container-fluid">
+
+	  <div class="jumbotron">
+	  <h2>Bar Chart</h2>
+
+	  <p>The process of creating a bar chart does not differ a lot from creating other types of charts. Create a new activity that will display the bar chart. For that, create two new files: activity_bar.xml and BarActivity.java. Include the new activity into the AndroidManifest.xml file:</p>
+      <pre><code>&ltactivity android:name=".BarActivity" /&gt</code></pre>
+
+      <p>The activity_bar.xml is the same as for the line chart.</p>
+
+      <p>The BarActivity.java is very similar for other charts we have created. However, while creating the graphical view we also need to specify the type. There are some options such as DEFAULT, STACKED, HEAPED. We will choose DEFAULT:</p>
+
+<pre><code>GraphicalView chart = ChartFactory.getBarChartView(BarActivity.this, dataset, mRenderer, BarChart.Type.DEFAULT);</code></pre>
+
+     <p>As a result, the bar chart displays the below information: <img class="emulator" src="15.png" alt="new module"></p>
+
+     <p>We can notice that the chart does not display properly on the screen. Thus, we can add zoom buttons to adjust the size of the chart. We need to add <code>mRenderer.setZoomButtonsVisible(true);</code>. We can zoom out using the zoom buttons and results will be: <img class="emulator" src="16.png" alt="new module"></p>
+
+     <p>It is possible to change the orientation of a chart. Use  <code>mRenderer.setOrientation(XYMultipleSeriesRenderer.Orientation.VERTICAL);</code> to change orientation from horizontal to vertical: <img class="emulator" src="17.png" alt="new module"></p>
+
+     <p>We will build a pie chart in the next section.</p>
+	 
+     <div class="button-group">
+		 <a type="button" class="btn btn-info" href="scatter.html">Prev</a>
+		 <a type="button" class="btn btn-info" href="pie.html">Next</a>
+	 </div>
+	  </div>
+
+      </div>
+      <!--Footer-->
+	  <hr>
+	  <div id="footer" class="footer">
+	  	<div class="container">
+	  		<div class="row">
+		        <div class="col-lg-12 text-center">
+		          <p class="small"><i class="fa fa-copyright"></i>2016 Written by Tatsiana Clifton</p>
+		        </div>
+		      </div>
+		    </div>
+		</div>
+      <script src='//code.jquery.com/jquery-1.11.0.min.js'></script>
+      <script src='/script.js'></script>
+    </body>
+
+</html>

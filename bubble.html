@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+	<head>
+	    <title>Home Page</title>
+	    <!-- Latest compiled and minified CSS -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	    <!-- Optional theme -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	     <!-- Font awesome -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	    <link rel='stylesheet' href='style.css'/>
+	</head>
+
+    <body>
+    <!--Navigation-->
+	    <nav class="navbar navbar-default navbar-fixed-top">
+	        <div class="container">
+	          
+	          <div class="navbar-header">
+		          <a class="navbar-brand" href="index.html">How-To AChartEngine</a>
+	          </div>
+	          
+	           <div id="myNavbar" class="navbar-collapse collapse">
+	              <ul class="nav navbar-nav navbar-right">
+	              <li><a class="page-scroll" href="index.html">Getting Started</a></li>
+	              <li><a class="page-scroll" href="line.html">Line Chart</a></li>
+	              <li><a class="page-scroll" href="area.html">Area Chart</a></li>
+	              <li><a class="page-scroll" href="scatter.html">Scatter Chart</a></li>
+	              <li><a class="page-scroll" href="bar.html">Bar Chart</a></li>
+	              <li><a class="page-scroll" href="pie.html">Pie Chart</a></li>
+	              <li><a class="page-scroll" href="bubble.html">Bubble Chart</a></li>
+                  <li><a class="page-scroll" href="combined.html">Combined Chart</a></li>
+	              </ul>
+	          </div>
+	          
+	        </div>
+	    </nav>
+	  <div class="container-fluid">
+
+	  <div class="jumbotron">
+	  <h2>Bubble Chart</h2>
+	  <p>Create a new activity that will display the bubble chart. For that, create two new files: activity_bubble.xml and BubbleActivity.java. Include the new activity into the AndroidManifest.xml file:</p>
+      <pre><code>&ltactivity android:name=".BubbleActivity" /&gt</code></pre>
+
+      <p>The activity_bubble.xml is the same as for the line chart.</p>
+
+      <p>The BubbleActivity.java will have the following code:</p>
+
+<pre><code>public class BubbleActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bubble);
+
+        XYValueSeries seriesA = new XYValueSeries("Technology A");
+        seriesA.add(200d, 12d, 1);
+        seriesA.add(300d, 60d, 3);
+        seriesA.add(1000d, 25d, 3);
+        seriesA.add(1700d, 65d, 18);
+
+        XYValueSeries seriesB = new XYValueSeries("Technology B");
+        seriesB.add(500d, 35d, 2);
+        seriesB.add(1000d, 50d, 5);
+        seriesB.add(1250d, 70d, 20);
+
+        XYValueSeries seriesC = new XYValueSeries("Technology C");
+        seriesC.add(300d, 45d, 2);
+        seriesC.add(700d, 85d, 10);
+        seriesC.add(1800d, 70d, 20);
+
+        XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+        dataset.addSeries(seriesA);
+        dataset.addSeries(seriesB);
+        dataset.addSeries(seriesC);
+
+        XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+        XYSeriesRenderer rendererA = new XYSeriesRenderer();
+        XYSeriesRenderer rendererB = new XYSeriesRenderer();
+        XYSeriesRenderer rendererC = new XYSeriesRenderer();
+        mRenderer.addSeriesRenderer(rendererA);
+        mRenderer.addSeriesRenderer(rendererB);
+        mRenderer.addSeriesRenderer(rendererC);
+
+        rendererA.setColor(Color.GREEN);
+        rendererB.setColor(Color.MAGENTA);
+        rendererC.setColor(Color.YELLOW);
+
+        mRenderer.setChartTitle("Product Comparison");
+        mRenderer.setChartTitleTextSize((float) 24.0);
+
+        int[] margins = {30, 60, 50, 30};
+        mRenderer.setMargins(margins);
+
+        double[] range = {0, 2000, 0, 90};
+        mRenderer.setRange(range);
+
+        mRenderer.setMarginsColor(Color.argb(0x00, 0x01, 0x01, 0x01));
+
+        mRenderer.setXTitle("Range, miles");
+        mRenderer.setYTitle("Capacity, tons");
+        mRenderer.setAxisTitleTextSize((float) 24.0);
+        mRenderer.setLabelsColor(Color.BLACK);
+        mRenderer.setLabelsTextSize((float)24.0);
+
+        mRenderer.setApplyBackgroundColor(true);
+        mRenderer.setBackgroundColor(Color.TRANSPARENT);
+
+        mRenderer.setShowGrid(true);
+
+        mRenderer.setXLabelsColor(Color.BLACK);
+        mRenderer.setYLabelsColor(0, Color.BLACK);
+        mRenderer.setXAxisColor(Color.BLACK);
+        mRenderer.setYAxisColor(Color.BLACK);
+
+        mRenderer.setLegendTextSize((float)26.0);
+        LinearLayout chartContainer = (LinearLayout) findViewById(R.id.bubble_chart_container);
+
+        chartContainer.removeAllViews();
+
+        GraphicalView chart = ChartFactory.getBubbleChartView(BubbleActivity.this, dataset, mRenderer);
+        chartContainer.addView(chart);
+    }
+}</code></pre>
+
+   <p>First, we create three value series for three different technologies and populate them with some data. We should notice that for a bubble chart we use XY value series. This series is an extension of the XY series which adds a third dimension. This dimension is a size of bubbles. </p>
+   <p>We create a dataset and add series to it:</p>
+<pre><code>XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+dataset.addSeries(seriesA);
+dataset.addSeries(seriesB);
+dataset.addSeries(seriesC);</code></pre>
+
+   <p>We create a multiple series renderer and a renderer for each series. Next, we add series renderers to the multiple series renderer:</p>
+<pre><code>XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+XYSeriesRenderer rendererA = new XYSeriesRenderer();
+XYSeriesRenderer rendererB = new XYSeriesRenderer();
+XYSeriesRenderer rendererC = new XYSeriesRenderer();
+mRenderer.addSeriesRenderer(rendererA);
+mRenderer.addSeriesRenderer(rendererB);
+mRenderer.addSeriesRenderer(rendererC);</code></pre>
+
+    <p>After that we perform some customization. It is almost the same as we have done already. Additionally, we set the range for axes: </p>
+<pre><code>double[] range = {0, 2000, 0, 90};
+mRenderer.setRange(range);</code></pre>
+
+    <p>Finally,we find by id the linear layout we have created as a container for a bubble chart <code>LinearLayout chartContainer = (LinearLayout) findViewById(R.id.bubble_chart_container);</code>. We create the view that encapsulates the bubble chart <code>GraphicalView chart = ChartFactory.getBubbleChartView(BubbleActivity.this, dataset, mRenderer);</code> and add it to the linear layout <code>chartContainer.addView(chart);</code>.</p>
+	  
+    <p>The bubble chart that was created: <img class="emulator" src="19.png" alt="new module"></p>
+
+    <p>In the last section, we create a combined chart.</p>
+	 
+     <div class="button-group">
+		 <a type="button" class="btn btn-info" href="pie.html">Prev</a>
+         <a type="button" class="btn btn-info" href="combined.html">Next</a>
+	 </div>
+	  </div>
+
+      </div>
+      <!--Footer-->
+	  <hr>
+	  <div id="footer" class="footer">
+	  	<div class="container">
+	  		<div class="row">
+		        <div class="col-lg-12 text-center">
+		          <p class="small"><i class="fa fa-copyright"></i>2016 Written by Tatsiana Clifton</p>
+		        </div>
+		      </div>
+		    </div>
+		</div>
+      <script src='//code.jquery.com/jquery-1.11.0.min.js'></script>
+      <script src='/script.js'></script>
+    </body>
+
+</html>

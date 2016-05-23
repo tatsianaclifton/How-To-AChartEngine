@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+	<head>
+	    <title>Home Page</title>
+	    <!-- Latest compiled and minified CSS -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	    <!-- Optional theme -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	     <!-- Font awesome -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	    <link rel='stylesheet' href='style.css'/>
+	</head>
+
+    <body>
+    <!--Navigation-->
+	    <nav class="navbar navbar-default navbar-fixed-top">
+	        <div class="container">
+	          
+	          <div class="navbar-header">
+		          <a class="navbar-brand" href="index.html">How-To AChartEngine</a>
+	          </div>
+	          
+	           <div id="myNavbar" class="navbar-collapse collapse">
+	              <ul class="nav navbar-nav navbar-right">
+	              <li><a class="page-scroll" href="index.html">Getting Started</a></li>
+	              <li><a class="page-scroll" href="line.html">Line Chart</a></li>
+	              <li><a class="page-scroll" href="area.html">Area Chart</a></li>
+	              <li><a class="page-scroll" href="scatter.html">Scatter Chart</a></li>
+	              <li><a class="page-scroll" href="bar.html">Bar Chart</a></li>
+	              <li><a class="page-scroll" href="pie.html">Pie Chart</a></li>
+	              <li><a class="page-scroll" href="bubble.html">Bubble Chart</a></li>
+	              <li><a class="page-scroll" href="combined.html">Combined Chart</a></li>
+	              </ul>
+	          </div>
+	          
+	        </div>
+	    </nav>
+	  <div class="container-fluid">
+
+	  <div class="jumbotron">
+	  <h2>Pie Chart</h2>
+
+	   <p>Create a new activity that will display the pie chart. For that, create two new files: activity_pie.xml and PieActivity.java. Include the new activity into the AndroidManifest.xml file:</p>
+      <pre><code>&ltactivity android:name=".PieActivity" /&gt</code></pre>
+
+      <p>The activity_pie.xml is the same as for the line chart.</p>
+
+      <p>The BarActivity.java will have the following code:</p>
+<pre><code>public class PieActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pie);
+
+        String[] names = new String[] {
+                "Store A", "Store B" , "Store C", "Store C", "Store D", "Store F"
+        };
+
+        double[] part = {8.2, 22.8, 25.0, 12.5, 12.5, 19.0};
+
+        int[] colors = {Color.BLUE, Color.MAGENTA, Color.RED, Color.GREEN, Color.YELLOW, Color.GRAY};
+
+        CategorySeries series = new CategorySeries("Sales by Store");
+        for(int i=0; i&ltpart.length; i++){
+            series.add(names[i], part[i]);
+        }
+
+        DefaultRenderer dRenderer = new DefaultRenderer();
+        for(int i=0; i&ltpart.length; i++){
+            SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
+            renderer.setColor(colors[i]);
+            dRenderer.addSeriesRenderer(renderer);
+        }
+
+        dRenderer.setLabelsColor(Color.BLACK);
+        dRenderer.setLabelsTextSize(28);
+        dRenderer.setLegendTextSize(28);
+        dRenderer.setShowLabels(false);
+        dRenderer.setDisplayValues(true);
+
+        LinearLayout chartContainer = (LinearLayout) findViewById(R.id.pie_chart_container);
+        chartContainer.removeAllViews();
+
+        GraphicalView chart = ChartFactory.getPieChartView(PieActivity.this, series, dRenderer);
+        chartContainer.addView(chart);
+    }
+}</code></pre>
+
+    <p>We start with creating the array of string that holds names of the pie chart sections:<code>String[] names = new String[] {"Store A", "Store B" , "Store C", "Store C", "Store D", "Store F"};</code>. Next, we create the array of doubles that holds values for each section of the chart <code>double[] part = {8.2, 22.8, 25.0, 12.5, 12.5, 19.0};</code>. We set colors for each section of the chart<code>int[] colors = {Color.BLUE, Color.MAGENTA, Color.RED, Color.GREEN, Color.YELLOW, Color.GRAY};</code>. We initialize series and add all values and names of categories to series:</p>
+
+<pre><code>//initialize series
+CategorySeries series = new CategorySeries("Sales by Store");
+for(int i=0; i&ltpart.length; i++){
+    //add value and name of category to series
+    series.add(names[i], part[i]);
+}</code></pre>
+
+	<p>We initialize a renderer that will be extended with simple series renderer <code>DefaultRenderer dRenderer = new DefaultRenderer();</code>. For each section we initialize a simple series renderer and add it to the renderer: </p>
+
+<pre><code>for(int i=0; i&ltpart.length; i++){
+	//create simple series renderer
+	SimpleSeriesRenderer renderer = new SimpleSeriesRenderer();
+	//set color of section of pies chart
+	renderer.setColor(colors[i]);
+	//add simple series renderer to renderer
+	dRenderer.addSeriesRenderer(renderer);
+}
+</code></pre>
+	  
+	  <p>After that, we add some styling such as size and colors of labels, size of legend's text, and specifying if values are displayed on each section: </p>
+
+<pre><code>//set colors of labels
+dRenderer.setLabelsColor(Color.BLACK);
+//set size of labels and legend
+dRenderer.setLabelsTextSize(28);
+dRenderer.setLegendTextSize(28);
+//hide labels
+dRenderer.setShowLabels(false);
+//show values
+dRenderer.setDisplayValues(true);</code></pre>
+
+    <p>Next, we find by id the linear layout we have created as a container for a pie chart <code>LinearLayout chartContainer = (LinearLayout) findViewById(R.id.pie_chart_container);</code>. We create the view that encapsulates the pie chart <code>GraphicalView chart = ChartFactory.getPieChartView(PieActivity.this, series, dRenderer);</code> and add it to the linear layout <code>chartContainer.addView(chart);</code>.</p>
+
+	 <p>The pie chart that was created: <img class="emulator" src="18.png" alt="new module"></p>
+    <p>In the next section, we create a bubble chart.</p>
+
+     <div class="button-group">
+		 <a type="button" class="btn btn-info" href="bar.html">Prev</a>
+		 <a type="button" class="btn btn-info" href="bubble.html">Next</a>
+	 </div>
+	  </div>
+
+      </div>
+      <!--Footer-->
+	  <hr>
+	  <div id="footer" class="footer">
+	  	<div class="container">
+	  		<div class="row">
+		        <div class="col-lg-12 text-center">
+		          <p class="small"><i class="fa fa-copyright"></i>2016 Written by Tatsiana Clifton</p>
+		        </div>
+		      </div>
+		    </div>
+		</div>
+      <script src='//code.jquery.com/jquery-1.11.0.min.js'></script>
+      <script src='/script.js'></script>
+    </body>
+
+</html>

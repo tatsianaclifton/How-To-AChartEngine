@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+	<head>
+	    <title>Home Page</title>
+	    <!-- Latest compiled and minified CSS -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	    <!-- Optional theme -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	     <!-- Font awesome -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	    <link rel='stylesheet' href='style.css'/>
+	</head>
+
+    <body>
+    <!--Navigation-->
+	    <nav class="navbar navbar-default navbar-fixed-top">
+	        <div class="container">
+	          
+	          <div class="navbar-header">
+		          <a class="navbar-brand" href="index.html">How-To AChartEngine</a>
+	          </div>
+	          
+	           <div id="myNavbar" class="navbar-collapse collapse">
+	              <ul class="nav navbar-nav navbar-right">
+	              <li><a class="page-scroll" href="index.html">Getting Started</a></li>
+	              <li><a class="page-scroll" href="line.html">Line Chart</a></li>
+	              <li><a class="page-scroll" href="area.html">Area Chart</a></li>
+	              <li><a class="page-scroll" href="scatter.html">Scatter Chart</a></li>
+	              <li><a class="page-scroll" href="bar.html">Bar Chart</a></li>
+	              <li><a class="page-scroll" href="pie.html">Pie Chart</a></li>
+	              <li><a class="page-scroll" href="bubble.html">Bubble Chart</a></li>
+                  <li><a class="page-scroll" href="combined.html">Combined Chart</a></li>
+	              </ul>
+	          </div>
+	          
+	        </div>
+	    </nav>
+	  <div class="container-fluid">
+
+	  <div class="jumbotron">
+	  <h2>Combined Chart</h2>
+      <p>In this section, we will see how to include different types of charts to the same X and Y axes. These types of charts are called combined. We will create a combined chart that consists of a line chart, an area chart and a bar chart. We should get the following result: <img class="emulator" src="20.png" alt="new module"></p>
+
+	  <p>Create a new activity that will display the combined chart. For that, create two new files: activity_combined.xml and CombinedActivity.java. Include the new activity into the AndroidManifest.xml file:</p>
+      <pre><code>&ltactivity android:name=".CombinedActivity" /&gt</code></pre>
+
+      <p>The activity_combined.xml is the same as for the line chart.</p>
+
+      <p>The CombinedActivity.java will have the following code:</p>
+<pre><code>public class CombinedActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_combined);
+
+        int month[] = {0, 1, 2};
+        int carSale[] = {10000, 14000, 12000};
+        int carSale2014[]= {14000, 15000, 9000};
+        int average[] = {12000, 14500, 10500};
+        int planned[] = {13000, 15000, 14000};
+
+        XYSeries series = new XYSeries("Sales 2015");
+        XYSeries series2014 = new XYSeries("Sales 2014");
+        XYSeries seriesAvg = new XYSeries("Average Sales");
+        XYSeries seriesPlanned = new XYSeries("Planned Sales");
+
+        for (int i = 0; i < month.length; i++) {
+            series.add(month[i], carSale[i]);
+            series2014.add(month[i], carSale2014[i]);
+            seriesAvg.add(month[i], average[i]);
+            seriesPlanned.add(month[i], planned[i]);
+        }
+
+        XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+        dataset.addSeries(seriesPlanned);
+        dataset.addSeries(series);
+        dataset.addSeries(series2014);
+        dataset.addSeries(seriesAvg);
+
+        XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();
+        XYSeriesRenderer renderer = new XYSeriesRenderer();
+        XYSeriesRenderer renderer2014 = new XYSeriesRenderer();
+        XYSeriesRenderer rendererAvg = new XYSeriesRenderer();
+        XYSeriesRenderer rendererPlanned = new XYSeriesRenderer();
+        mRenderer.addSeriesRenderer(rendererPlanned);
+        mRenderer.addSeriesRenderer(renderer);
+        mRenderer.addSeriesRenderer(renderer2014);
+        mRenderer.addSeriesRenderer(rendererAvg);
+
+        //make the area chart from the line chart
+        XYSeriesRenderer.FillOutsideLine fillY = new XYSeriesRenderer.FillOutsideLine(XYSeriesRenderer.FillOutsideLine.Type.BOUNDS_ALL);
+        fillY.setColor(Color.GREEN);
+        rendererPlanned.addFillOutsideLine(fillY);
+
+        //display values on lines
+        renderer.setDisplayChartValues(true);
+        renderer2014.setDisplayChartValues(true);
+        rendererAvg.setDisplayChartValues(true);
+        rendererPlanned.setDisplayChartValues(true);
+
+        //set the size of values
+        renderer.setChartValuesTextSize(18);
+        renderer2014.setChartValuesTextSize(18);
+        rendererAvg.setChartValuesTextSize(18);
+        rendererPlanned.setChartValuesTextSize(18);
+
+        //give the title for the chart
+        mRenderer.setChartTitle("Sales");
+        //set the size of the chart title
+        mRenderer.setChartTitleTextSize((float) 24.0);
+        //set margins and define their color as transparent
+        int[] margins = {60, 60, 60, 60};
+        mRenderer.setMargins(margins);
+        mRenderer.setMarginsColor(Color.argb(0x01, 0x01, 0x01, 0x01));
+        //set titles for axes, their size and color
+        mRenderer.setXTitle("Month");
+        mRenderer.setYTitle("Average Sales");
+        mRenderer.setAxisTitleTextSize((float) 24.0);
+        //set the size and the color of labels
+        mRenderer.setLabelsColor(Color.BLACK);
+        mRenderer.setLabelsTextSize((float)24.0);
+        //set the background color of the chart
+        mRenderer.setApplyBackgroundColor(true);
+        mRenderer.setBackgroundColor(Color.TRANSPARENT);
+        //show grid
+        mRenderer.setShowGrid(true);
+        //show values of the chart
+        mRenderer.setDisplayValues(true);
+        //create the array of strings for the X axis labels
+        String[] m = new String[] {
+                "Jan", "Feb" , "Mar"
+        };
+        //add text of labels to the X axis
+        for(int i=0; i< month.length;i++){
+            mRenderer.addXTextLabel(i, m[i]);
+        }
+        //hide the labels that only their text will be shown
+        mRenderer.setXLabels(0);
+        //set color of labels and axes
+        mRenderer.setXLabelsColor(Color.BLACK);
+        mRenderer.setYLabelsColor(0, Color.BLACK);
+        mRenderer.setXAxisColor(Color.BLACK);
+        mRenderer.setYAxisColor(Color.BLACK);
+        //set the text size of the legend
+        mRenderer.setLegendTextSize((float)26.0);
+
+        //set zoom to be visible
+        mRenderer.setZoomButtonsVisible(true);
+
+        //set the width of the lines
+        rendererAvg.setLineWidth(4);
+        rendererPlanned.setLineWidth(4);
+
+        //set spaces between bars
+        mRenderer.setBarSpacing(0.1);
+        //set bar width
+        mRenderer.setBarWidth(100);
+        //set colors
+        renderer.setColor(Color.BLUE);
+        renderer2014.setColor(Color.RED);
+        rendererAvg.setColor(Color.MAGENTA);
+        rendererPlanned.setColor(Color.GREEN);
+
+        //specify which types the combined chart will include
+        CombinedXYChart.XYCombinedChartDef[] types = new CombinedXYChart.XYCombinedChartDef[] {
+                new CombinedXYChart.XYCombinedChartDef(BarChart.TYPE, 1, 2),
+                new CombinedXYChart.XYCombinedChartDef(LineChart.TYPE, 3),
+                new CombinedXYChart.XYCombinedChartDef(LineChart.TYPE, 0)
+        };
+
+        LinearLayout chartContainer = (LinearLayout) findViewById(R.id.combined_chart_container);
+        chartContainer.removeAllViews();
+
+        GraphicalView chart = ChartFactory.getCombinedXYChartView(CombinedActivity.this, dataset, mRenderer, types);
+        chartContainer.addView(chart);
+    }
+}</code></pre>
+
+      <p>We create an area chart, a bar chart and a line chart in the same way as we have created them in previous sections. We just add all series to the same dataset and all XY renderers to the same multiple renderer. It should be mentioned that the order in which XY renderers are included in a multiple renderer are important. It is the order in which the charts will be displayed. Specifically, we want the area chart to be hidden behind the others. We will first include the area chart renderer to the multiple renderer. The line chart should be in front. Then, as the last step we include the line chart renderer to the multiple renderer.</p>
+
+      <p>For combined charts, we need to specifiy what types of charts it will include:</p>
+<pre><code>CombinedXYChart.XYCombinedChartDef[] types = new CombinedXYChart.XYCombinedChartDef[] {
+    new CombinedXYChart.XYCombinedChartDef(BarChart.TYPE, 1, 2),
+    new CombinedXYChart.XYCombinedChartDef(LineChart.TYPE, 3),
+    new CombinedXYChart.XYCombinedChartDef(LineChart.TYPE, 0)
+};</code></pre>
+
+      <p>For each chart, we define a chart type and a corresponding data series index.</p>
+
+       <p>For this guide, we use the version 1.2.0 of the library. In this version, the types of charts are specified as <code>CombinedXYChart.XYCombinedChartDef[]</code>. However, in <a href="http://www.achartengine.org/content/javadoc/index.html">Javadoc</a> you can see that the constructor for a combined chart accepts an array of strings that specifies types <code>CombinedXYChart(XYMultipleSeriesDataset dataset, XYMultipleSeriesRenderer renderer, java.lang.String[] types)</code>.</p>
+
+       <p>Finally, we locate by id the linear layout we have created as a container for a combined chart <code>LinearLayout chartContainer = (LinearLayout) findViewById(R.id.combined_chart_container);</code>. We create the view that encapsulates the combined chart <code>GraphicalView chart = ChartFactory.getCombinedXYChartView(CombinedActivity.this, dataset, mRenderer, types);</code> and add it to the linear layout <code>chartContainer.addView(chart);</code>.</p>
+      
+	   <h3>Conclusion</h3>
+	   <p>In this guide, we have seen how to create 7 types of charts using the AChartEngine library. We also have seen how you can customize these charts. Using the library it also possible to create other types of charts such as time, doughnut, and dial chart.  </p>
+	 
+     <div class="button-group">
+		 <a type="button" class="btn btn-info" href="bubble.html">Prev</a>
+	 </div>
+	  </div>
+
+      </div>
+      <!--Footer-->
+	  <hr>
+	  <div id="footer" class="footer">
+	  	<div class="container">
+	  		<div class="row">
+		        <div class="col-lg-12 text-center">
+		          <p class="small"><i class="fa fa-copyright"></i>2016 Written by Tatsiana Clifton</p>
+		        </div>
+		      </div>
+		    </div>
+		</div>
+      <script src='//code.jquery.com/jquery-1.11.0.min.js'></script>
+      <script src='/script.js'></script>
+    </body>
+
+</html>
